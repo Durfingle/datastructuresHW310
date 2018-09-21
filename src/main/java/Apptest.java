@@ -24,14 +24,28 @@ class ScannedStringStats {
 
     private int lengthOfLongest;
     private double averageLineLength;
-}
-class TokenCounter {
 
-    public TokenCounter() {
+    public List<String> getAllTokens() {
+        return allTokens;
+    }
+
+    public void setAllTokens(List<String> allTokens) {
+        this.allTokens = allTokens;
+    }
+    public int getAllTokensLength() {
+        return this.allTokens.size();
+    }
+
+    List<String> allTokens = new ArrayList<String>();
+
+}
+class Token {
+
+    public Token() {
         this.setString("");
         this.setNumOfTimesSeen(0);
     }
-    public TokenCounter(String stringToSet) {
+    public Token(String stringToSet) {
         this.setString(stringToSet);
         this.setNumOfTimesSeen(1);
     }
@@ -57,6 +71,8 @@ class TokenCounter {
     private String string;
     private int numOfTimesSeen;
 }
+
+
 class TokenArrayList<E> extends ArrayList {
     public int getNumOfTimesExists() {
         return numOfTimesExists;
@@ -75,8 +91,8 @@ class TokenArrayList<E> extends ArrayList {
 }
 
 public class Apptest {
-    protected ArrayList<TokenCounter> arrayListEater(ArrayList<String> arrayList) {
-        ArrayList<TokenCounter> tokenArrayList = new ArrayList<TokenCounter>();
+    protected ArrayList<Token> arrayListEater(ArrayList<String> arrayList) {
+        ArrayList<Token> tokenArrayList = new ArrayList<Token>();
 
         for (int index = 0; index < arrayList.size() ; index++) {
             String stringToTry = arrayList.get(index);
@@ -89,7 +105,7 @@ public class Apptest {
                 }
             }
             if (stringIsInHolderIndex == false) {
-                tokenArrayList.add(new TokenCounter(stringToTry));
+                tokenArrayList.add(new Token(stringToTry));
             }
         }
 
@@ -170,11 +186,15 @@ public class Apptest {
         Integer i = totalLineLengthSize;
         System.out.println("-------------------------------------------------------------");
         System.out.println(allTokens);
-        for(String token:allTokens) {
 
+        //ArrayList<String> noDupes = new ArrayList<String>();
+        for(String token:allTokens) {
+        //    System.out.println("token: " + token + " | freqency: " + Collections.frequency(allTokens,token));
         }
         System.out.println("-------------------------------------------------------------");
         scannedStringStats.setAverageLineLength(new Double(totalLineLengthSize) / new Double(numberOfLines));
+        scannedStringStats.setAllTokens(allTokens);
+
         return scannedStringStats;
     }
 
@@ -205,6 +225,7 @@ public class Apptest {
                                 System.out.println("Tried to search file");
                                 lines.add("Length of longest line in file: " + scannedStringStats.getLengthOfLongest());
                                 lines.add("Average line length in file: " + scannedStringStats.getAverageLineLength());
+                                lines.add("Number of all space-delineated tokens in file: " + scannedStringStats.getAllTokensLength());
                                 Path filePath = Paths.get(currentDirectory + "\\" + newStatsFile.getName());
                                 Files.write(filePath, lines);
                                 file.createNewFile();
@@ -235,7 +256,6 @@ public class Apptest {
                 System.out.println("yup2");
             }
         }
-
         //readFile("C:\\Users\\mjk29\\IdeaProjects\\Apptest\\src\\main\\java","test.txt");
 
     }
