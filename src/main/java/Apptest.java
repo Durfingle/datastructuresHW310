@@ -49,6 +49,10 @@ class Token {
         this.setString(stringToSet);
         this.setNumOfTimesSeen(1);
     }
+    public Token(String stringToSet, int numOfTimesSeen) {
+        this.setString(stringToSet);
+        this.setNumOfTimesSeen(numOfTimesSeen);
+    }
     public String getString() {
         return string;
     }
@@ -184,14 +188,54 @@ public class Apptest {
         ScannedStringStats scannedStringStats = new ScannedStringStats();
         scannedStringStats.setLengthOfLongest(longestLine);
         Integer i = totalLineLengthSize;
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("1-------------------------------------------------------------");
         System.out.println(allTokens);
 
-        //ArrayList<String> noDupes = new ArrayList<String>();
+        ArrayList<Token> noDupes = new ArrayList<Token>();
         for(String token:allTokens) {
-        //    System.out.println("token: " + token + " | freqency: " + Collections.frequency(allTokens,token));
+            System.out.println("token: " + token + " | freqency: " + Collections.frequency(allTokens,token));
+            boolean alreadyInNoDupes = false;
+            for (Token oneOnlyToken:noDupes) {
+                if(token.equals(oneOnlyToken.getString()) && !alreadyInNoDupes) {
+                    alreadyInNoDupes = true;
+                    System.out.println("Not going to add this one");
+                    break;
+                }
+            }
+            if (!alreadyInNoDupes) {
+                System.out.println("Added above");
+                if (noDupes.size() == 0){
+                    noDupes.add(new Token(token, Collections.frequency(allTokens,token)));
+                }
+                else {
+                    int index = 0;
+                    boolean done = false;
+                    while (done == false) {
+                        if (index < noDupes.size()) {
+                            if (noDupes.get(index).getNumOfTimesSeen() >= Collections.frequency(allTokens, token)) {
+                                noDupes.add(index, new Token(token, Collections.frequency(allTokens,token)));
+                                done = true;
+                            }
+                            else {
+                                index++;
+                            }
+                        }
+                        else {
+                            noDupes.add(new Token(token, Collections.frequency(allTokens,token)));
+                            done = true;
+                        }
+                    }
+                }
+            }
         }
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("Done removing duplicates, printing final sorted array");
+        for (Token current:noDupes) {
+            System.out.println(current.getString() + " ||| " + current.getNumOfTimesSeen());
+        }
+        System.out.println("Done printing final sorted array");
+
+
+        System.out.println("2-------------------------------------------------------------");
         scannedStringStats.setAverageLineLength(new Double(totalLineLengthSize) / new Double(numberOfLines));
         scannedStringStats.setAllTokens(allTokens);
 
