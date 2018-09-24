@@ -1,99 +1,114 @@
 package edu.sdsu.cs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class TokenFinder {
 
     private ArrayList<Token> defaultTokenList = new ArrayList<>();
+    private ArrayList<String> defaultStringList = new ArrayList<>();
 
+    /**
+     * Throw an Exception for. NO NULL ARRAYS ALLOWED.
+     */
     public TokenFinder() {
-        listBuilder(defaultTokenList);
+        stringListBuilder(this.defaultStringList);
     }
 
-    public TokenFinder(ArrayList<Token> inputArray) {
-        this.defaultTokenList = inputArray;
+    public TokenFinder(ArrayList<Token> tokenArrayList) {
+        this.defaultTokenList = tokenArrayList;
     }
 
-    private void listBuilder(ArrayList<Token> tokenArrayListArrayList) {
-        tokenArrayListArrayList.add(new Token("test1"));
-        tokenArrayListArrayList.add(new Token("test2"));
-        tokenArrayListArrayList.add(new Token("test2"));
-        tokenArrayListArrayList.add(new Token("test1"));
-        tokenArrayListArrayList.add(new Token("test3"));
-        tokenArrayListArrayList.add(new Token("test1"));
-        tokenArrayListArrayList.add(new Token("test4"));
-        tokenArrayListArrayList.add(new Token("test1"));
-        tokenArrayListArrayList.add(new Token("test4"));
-        tokenArrayListArrayList.add(new Token("test1"));
-        tokenArrayListArrayList.add(new Token("test4"));
-        tokenArrayListArrayList.add(new Token("test1"));
-        tokenArrayListArrayList.add(new Token("test4"));
-
-
-    }
-
-    private void removeDuplicates() {
-
-        Token tkLst[] = new Token[defaultTokenList.size()];
-        tkLst = defaultTokenList.toArray(tkLst);
-        for (Token tk : tkLst) {
-            int nextTokenIndex = this.defaultTokenList.lastIndexOf(tk);
-
-            if (tk.getString().compareToIgnoreCase(//the .getString of the
-                    // next token)){
-                this.defaultTokenList.remove(this.defaultTokenList.lastIndexOf(tk));
-            }
-
+    /**
+     * ONLY FOR BUILDING FROM THE DEFAULT STRING LIST. NOT NEEDED FOR SUBMISSION
+     */
+    private void buildTokenListFromStringList() {
+        for (String str : defaultStringList) {
+            defaultTokenList.add(new Token(str,
+                    Collections.frequency(defaultStringList, str)));
         }
-
     }
 
-    private void removeDuplicates(ArrayList<Token> tokenArrayList) {
+    protected void sortByFrequency() {
+        Collections.sort(this.defaultTokenList, new SortbyFrequency());
+    }
 
-        Object[] objList = tokenArrayList.toArray();
-        for (Object obj : objList) {
-            if (tokenArrayList.indexOf(obj) != tokenArrayList.lastIndexOf(obj)) {
-                tokenArrayList.remove(tokenArrayList.lastIndexOf(obj));
+    protected void removeDuplicateTokens(ArrayList<Token> tokenArrayList) {
+        ArrayList<Token> uniqueTokens = new ArrayList<>();
+        ArrayList<String> tokenStrings = new ArrayList<>();
+
+        for (Token token : tokenArrayList) {
+            if (!tokenStrings.contains(token.getString())) {
+                tokenStrings.add(token.getString());
+                uniqueTokens.add(token);
             }
         }
+        this.defaultTokenList = uniqueTokens;
+        Collections.sort(defaultTokenList, new SortbyFrequency());
     }
 
-
-    public void findUniqueToken(ArrayList<Token> tokenArrayList) {
-
-        for (Token tok : tokenArrayList) {
-            tok.setNumOfTimesSeen(Collections.frequency(tokenArrayList, tok));
-        }
-        removeDuplicates(tokenArrayList);
+    private void setDefaultTokenList(ArrayList<Token> tokenListToSet) {
+        this.defaultTokenList = tokenListToSet;
     }
 
-    public void findUniqueToken() {
-
-        for (Token tok : this.defaultTokenList) {
-            tok.setNumOfTimesSeen(Collections.frequency(this.defaultTokenList, tok));
-        }
-        removeDuplicates(this.defaultTokenList);
+    private void setDefaultStringList(ArrayList<String> stringListToSet) {
+        this.defaultStringList = stringListToSet;
     }
 
-    public ArrayList<Token> getList() {
+    public ArrayList<Token> getDefaultTokenList() {
         return defaultTokenList;
     }
 
-    private String getTokenString(ArrayList<Token> tokenArrayList, int index){
-        Token retrievedToken = tokenArrayList.get(index);
-        return retrievedToken.getString();
+    public ArrayList<String> getDefaultStringList() {
+        return defaultStringList;
     }
 
-    public void printList(ArrayList<Token> tokenArrayList) {
-        for (Token tok : tokenArrayList) {
-            System.out.println(tok.getString() + " : " + tok.getNumOfTimesSeen());
+    private void stringListBuilder(ArrayList<String> stringArrayList) {
+
+        stringArrayList.add("test1");
+        stringArrayList.add("test2");
+        stringArrayList.add("test1");
+        stringArrayList.add("test3");
+        stringArrayList.add("test3");
+        stringArrayList.add("test3");
+        stringArrayList.add("test3");
+        stringArrayList.add("test4");
+        stringArrayList.add("test7");
+        stringArrayList.add("test4");
+        stringArrayList.add("test5");
+        stringArrayList.add("test5");
+        stringArrayList.add("test3");
+        stringArrayList.add("test5");
+        stringArrayList.add("test5");
+    }
+
+    class SortbyFrequency implements Comparator<Token> {
+
+        public int compare(Token tkA, Token tkB) {
+            return tkA.getNumOfTimesSeen() - tkB.getNumOfTimesSeen();
+        }
+
+    }
+
+    /**
+     * For Testing Purposes. REMOVE BEFORE SUBMITTING!!!
+     */
+    public void standardRun() {
+        System.out.println("Unsorted List");
+        for (String str : defaultStringList) {
+            System.out.println(str);
+        }
+        System.out.println("_Build Token List_");
+        buildTokenListFromStringList();
+        System.out.println("__Sort By Frequency__");
+        sortByFrequency();
+        System.out.println("__Remove Duplicates__");
+        removeDuplicateTokens(defaultTokenList);
+        for(Token tok: defaultTokenList){
+            System.out.println(tok);
         }
     }
 
-    public void printList() {
-        for (Token tok : this.defaultTokenList) {
-            System.out.println(tok.getString() + ":" + tok.getNumOfTimesSeen());
-        }
-    }
 }
