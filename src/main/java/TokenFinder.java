@@ -1,7 +1,6 @@
 package edu.sdsu.cs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -31,8 +30,19 @@ public class TokenFinder {
         }
     }
 
+    private void buildTokenList(){
+        for(Token tok: defaultTokenList){
+            defaultStringList.add(tok.getString());
+        }
+        defaultTokenList.clear();
+        for(String str: defaultStringList){
+            defaultTokenList.add(new Token(str,
+                    Collections.frequency(defaultStringList, str)));
+        }
+    }
+
     protected void sortByFrequency() {
-        Collections.sort(this.defaultTokenList, new SortbyFrequency());
+        Collections.sort(this.defaultTokenList, new SortByFrequency());
     }
 
     protected void removeDuplicateTokens(ArrayList<Token> tokenArrayList) {
@@ -46,7 +56,21 @@ public class TokenFinder {
             }
         }
         this.defaultTokenList = uniqueTokens;
-        Collections.sort(defaultTokenList, new SortbyFrequency());
+        Collections.sort(defaultTokenList, new SortByFrequency());
+    }
+
+    protected void removeDuplicateTokens() {
+        ArrayList<Token> uniqueTokens = new ArrayList<>();
+        ArrayList<String> tokenStrings = new ArrayList<>();
+
+        for (Token token : defaultTokenList) {
+            if (!tokenStrings.contains(token.getString())) {
+                tokenStrings.add(token.getString());
+                uniqueTokens.add(token);
+            }
+        }
+        this.defaultTokenList = uniqueTokens;
+        Collections.sort(defaultTokenList, new SortByFrequency());
     }
 
     private void setDefaultTokenList(ArrayList<Token> tokenListToSet) {
@@ -84,7 +108,7 @@ public class TokenFinder {
         stringArrayList.add("test5");
     }
 
-    class SortbyFrequency implements Comparator<Token> {
+    class SortByFrequency implements Comparator<Token> {
 
         public int compare(Token tkA, Token tkB) {
             return tkA.getNumOfTimesSeen() - tkB.getNumOfTimesSeen();
@@ -106,6 +130,21 @@ public class TokenFinder {
         sortByFrequency();
         System.out.println("__Remove Duplicates__");
         removeDuplicateTokens(defaultTokenList);
+        for(Token tok: defaultTokenList){
+            System.out.println(tok);
+        }
+    }
+
+    public void noArgRun(){
+        System.out.println("Unsorted List");
+        for (Token tok: defaultTokenList){
+            System.out.println(tok.getString());
+        }
+        buildTokenList();
+        System.out.println("__Sort By Frequency__");
+        sortByFrequency();
+        System.out.println("__Remove Duplicates__");
+        removeDuplicateTokens();
         for(Token tok: defaultTokenList){
             System.out.println(tok);
         }
