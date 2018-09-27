@@ -1,4 +1,4 @@
-package edu.sdsu.cs;
+//package edu.sdsu.cs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,20 +9,32 @@ public class TokenFinder {
     private ArrayList<Token> defaultTokenList = new ArrayList<>();
     private ArrayList<String> defaultStringList = new ArrayList<>();
 
-    /**
-     * Throw an Exception for. NO NULL ARRAYS ALLOWED.
-     */
-    public TokenFinder() {
-        stringListBuilder(this.defaultStringList);
+    private ArrayList<Token> lowerCaseTokenList = new ArrayList<>();
+    private ArrayList<String> lowerCaseStringList = new ArrayList<>();
+
+    protected ArrayList<Token> getTenMostFrequentTokens() {
+        return tenMostFrequentTokens;
     }
 
-    public TokenFinder(ArrayList<Token> tokenArrayList) {
-        this.defaultTokenList = tokenArrayList;
+    protected ArrayList<Token> getLowerCaseTokenList() {
+        return lowerCaseTokenList;
     }
 
-    /**
-     * ONLY FOR BUILDING FROM THE DEFAULT STRING LIST. NOT NEEDED FOR SUBMISSION
-     */
+    protected ArrayList<Token> getTenLeastFrequetTokens() {
+        return tenLeastFrequetTokens;
+    }
+
+    private ArrayList<Token> tenMostFrequentTokens = new ArrayList<>();
+    private ArrayList<Token> tenLeastFrequetTokens = new ArrayList<>();
+
+    protected TokenFinder() {
+        this.defaultStringList.add(" ");
+    }
+
+    protected TokenFinder(ArrayList<String> defaultStringList) {
+        this.defaultStringList = defaultStringList;
+    }
+
     private void buildTokenListFromStringList() {
         for (String str : defaultStringList) {
             defaultTokenList.add(new Token(str,
@@ -30,82 +42,41 @@ public class TokenFinder {
         }
     }
 
-    private void buildTokenList(){
-        for(Token tok: defaultTokenList){
-            defaultStringList.add(tok.getString());
-        }
-        defaultTokenList.clear();
-        for(String str: defaultStringList){
-            defaultTokenList.add(new Token(str,
-                    Collections.frequency(defaultStringList, str)));
+    private void buildLowerCaseStringListFromDefaultStringList() {
+        for (String str : defaultStringList) {
+            lowerCaseStringList.add(str.toLowerCase());
         }
     }
 
-    protected void sortByFrequency() {
+    private void buildLowerCaseTokenListFromLowerCaseStringList() {
+        for (String str : lowerCaseStringList) {
+            lowerCaseTokenList.add(new Token(str.toLowerCase(),
+                    Collections.frequency(lowerCaseStringList, str)));
+        }
+    }
+
+    private void sortByFrequency() {
         Collections.sort(this.defaultTokenList, new SortByFrequency());
+        Collections.sort(this.lowerCaseTokenList, new SortByFrequency());
     }
 
-    protected void removeDuplicateTokens(ArrayList<Token> tokenArrayList) {
+    private ArrayList<Token> removeDuplicateTokens(ArrayList<Token> outputArrayList) {
         ArrayList<Token> uniqueTokens = new ArrayList<>();
         ArrayList<String> tokenStrings = new ArrayList<>();
 
-        for (Token token : tokenArrayList) {
+        for (Token token : outputArrayList) {
             if (!tokenStrings.contains(token.getString())) {
                 tokenStrings.add(token.getString());
                 uniqueTokens.add(token);
             }
         }
-        this.defaultTokenList = uniqueTokens;
-        Collections.sort(defaultTokenList, new SortByFrequency());
+        outputArrayList = uniqueTokens;
+        Collections.sort(outputArrayList, new SortByFrequency());
+        return outputArrayList;
     }
 
-    protected void removeDuplicateTokens() {
-        ArrayList<Token> uniqueTokens = new ArrayList<>();
-        ArrayList<String> tokenStrings = new ArrayList<>();
-
-        for (Token token : defaultTokenList) {
-            if (!tokenStrings.contains(token.getString())) {
-                tokenStrings.add(token.getString());
-                uniqueTokens.add(token);
-            }
-        }
-        this.defaultTokenList = uniqueTokens;
-        Collections.sort(defaultTokenList, new SortByFrequency());
-    }
-
-    private void setDefaultTokenList(ArrayList<Token> tokenListToSet) {
-        this.defaultTokenList = tokenListToSet;
-    }
-
-    private void setDefaultStringList(ArrayList<String> stringListToSet) {
-        this.defaultStringList = stringListToSet;
-    }
-
-    public ArrayList<Token> getDefaultTokenList() {
+    protected ArrayList<Token> getDefaultTokenList() {
         return defaultTokenList;
-    }
-
-    public ArrayList<String> getDefaultStringList() {
-        return defaultStringList;
-    }
-
-    private void stringListBuilder(ArrayList<String> stringArrayList) {
-
-        stringArrayList.add("test1");
-        stringArrayList.add("test2");
-        stringArrayList.add("test1");
-        stringArrayList.add("test3");
-        stringArrayList.add("test3");
-        stringArrayList.add("test3");
-        stringArrayList.add("test3");
-        stringArrayList.add("test4");
-        stringArrayList.add("test7");
-        stringArrayList.add("test4");
-        stringArrayList.add("test5");
-        stringArrayList.add("test5");
-        stringArrayList.add("test3");
-        stringArrayList.add("test5");
-        stringArrayList.add("test5");
     }
 
     class SortByFrequency implements Comparator<Token> {
@@ -116,38 +87,22 @@ public class TokenFinder {
 
     }
 
-    /**
-     * For Testing Purposes. REMOVE BEFORE SUBMITTING!!!
-     */
-    public void standardRun() {
-        System.out.println("Unsorted List");
-        for (String str : defaultStringList) {
-            System.out.println(str);
-        }
-        System.out.println("_Build Token List_");
-        buildTokenListFromStringList();
-        System.out.println("__Sort By Frequency__");
-        sortByFrequency();
-        System.out.println("__Remove Duplicates__");
-        removeDuplicateTokens(defaultTokenList);
-        for(Token tok: defaultTokenList){
-            System.out.println(tok);
-        }
-    }
+    protected void standardRun() {
 
-    public void noArgRun(){
-        System.out.println("Unsorted List");
-        for (Token tok: defaultTokenList){
-            System.out.println(tok.getString());
-        }
-        buildTokenList();
-        System.out.println("__Sort By Frequency__");
+        buildLowerCaseStringListFromDefaultStringList();
+        buildLowerCaseTokenListFromLowerCaseStringList();
+        buildTokenListFromStringList();
         sortByFrequency();
-        System.out.println("__Remove Duplicates__");
-        removeDuplicateTokens();
-        for(Token tok: defaultTokenList){
-            System.out.println(tok);
+        this.defaultTokenList = removeDuplicateTokens(defaultTokenList);
+        this.lowerCaseTokenList = removeDuplicateTokens(lowerCaseTokenList);
+
+        for (int i = 0; i < 10; i++) {
+            tenLeastFrequetTokens.add(lowerCaseTokenList.get(i));
         }
+        for (int i = 0; i < 10; i++) {
+            tenMostFrequentTokens.add(lowerCaseTokenList.get(lowerCaseTokenList.size() - 1 - i));
+        }
+
     }
 
 }
