@@ -1,0 +1,9 @@
+Length of longest line in file: 85
+Average line length in file: 23.964601769911503
+Number of unique space-delineated tokens (case-sensitive): 113
+Number of unique space-delineated tokens (case-insensitive): 112
+Number of all space-delineated tokens in file: 255
+Most frequently occurring token(s): { [}], [{], }
+Count of most frequently occurring token (case-insensitive): 22
+10 most frequent tokens with their counts: { [}] seen:22, [{] seen:22, [=] seen:14, [new] seen:11, [private] seen:11, [arraylist<token>] seen:10, [arraylist<>();] seen:8, [protected] seen:7, [for] seen:6, [return] seen:6,}
+10 least frequent tokens with their counts: { [package] seen:1, [edu.sdsu.cs;] seen:1, [/**] seen:1, [micheal] seen:1, [kemper] seen:1, [juan] seen:1, [pina-sanz] seen:1, [*/] seen:1, [java.util.arraylist;] seen:1, [java.util.collections;] seen:1,}

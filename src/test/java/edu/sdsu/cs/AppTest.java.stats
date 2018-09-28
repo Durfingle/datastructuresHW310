@@ -1,0 +1,9 @@
+Length of longest line in file: 40
+Average line length in file: 10.2
+Number of unique space-delineated tokens (case-sensitive): 28
+Number of unique space-delineated tokens (case-insensitive): 27
+Number of all space-delineated tokens in file: 35
+Most frequently occurring token(s): { [}], [{], [public], [*/], [test], [*], [/**], [import], }
+Count of most frequently occurring token (case-insensitive): 2
+10 most frequent tokens with their counts: { [}] seen:2, [{] seen:2, [public] seen:2, [*/] seen:2, [test] seen:2, [*] seen:2, [/**] seen:2, [import] seen:2, [);] seen:1, [true] seen:1,}
+10 least frequent tokens with their counts: { [package] seen:1, [edu.sdsu.cs;] seen:1, [static] seen:1, [org.junit.assert.asserttrue;] seen:1, [org.junit.test;] seen:1, [unit] seen:1, [for] seen:1, [simple] seen:1, [app.] seen:1, [class] seen:1,}
