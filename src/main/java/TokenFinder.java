@@ -1,5 +1,9 @@
-//package edu.sdsu.cs;
+package edu.sdsu.cs;
 
+/**
+ * @author Micheal Kemper
+ * @author Juan Pina-Sanz
+ */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -60,7 +64,8 @@ public class TokenFinder {
         Collections.sort(this.lowerCaseTokenList, new SortByFrequency());
     }
 
-    private ArrayList<Token> removeDuplicateTokens(ArrayList<Token> outputArrayList) {
+    private ArrayList<Token> removeDuplicateTokens(ArrayList<Token>
+                                                           outputArrayList) {
         ArrayList<Token> uniqueTokens = new ArrayList<>();
         ArrayList<String> tokenStrings = new ArrayList<>();
 
@@ -96,11 +101,11 @@ public class TokenFinder {
         this.defaultTokenList = removeDuplicateTokens(defaultTokenList);
         this.lowerCaseTokenList = removeDuplicateTokens(lowerCaseTokenList);
 
-        for (int i = 0; i < 10; i++) {
-            tenLeastFrequetTokens.add(lowerCaseTokenList.get(i));
+        for (int index = 0; index < 10; index++) {
+            tenLeastFrequetTokens.add(lowerCaseTokenList.get(index));
         }
-        for (int i = 0; i < 10; i++) {
-            tenMostFrequentTokens.add(lowerCaseTokenList.get(lowerCaseTokenList.size() - 1 - i));
+        for (int index = 0; index < 10; index++) {
+            tenMostFrequentTokens.add(lowerCaseTokenList.get(lowerCaseTokenList.size() - 1 - index));
         }
 
     }
